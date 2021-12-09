@@ -8,6 +8,8 @@ main = do
     let input = parseInput inputText
     print $ solveA input
     print $ solveB input
+    print $ solveAfast input
+    print $ solveBfast input
 
 
 parseInput :: String -> [Int]
@@ -50,4 +52,12 @@ stepDayGen2 input = oldGen `M.union` newGen
               | otherwise = M.singleton 8 oldGenNewCreated
 
 --Later i saw a solution using MultiSet, this looked so beautifull i just wanted to try it for myself
-        
+stepDayGen3 = MS.concatMap singleStep
+  where singleStep x
+          | x == 0    = [6,8]
+          | otherwise = [x - 1]
+
+solveAfast = solveNfast 80 
+solveBfast = solveNfast 256
+solveNfast n input = MS.size $ generations input !! n
+generations input = iterate' stepDayGen3 (MS.fromList input)
