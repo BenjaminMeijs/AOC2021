@@ -1,5 +1,5 @@
-
-main = do
+module Day2 where
+solve = do
     inputText <- readFile "inputs/day2.txt" 
     let input = map parseCommand . lines $ inputText
     print $ solveA input

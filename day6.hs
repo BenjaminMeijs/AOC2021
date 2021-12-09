@@ -1,9 +1,10 @@
+module Day6 where
 import Data.List 
 import Data.Maybe
 import qualified Data.Map as M
 import qualified Data.MultiSet as MS
 
-main = do
+solve = do
     inputText <- readFile "inputs/day6.txt" 
     let input = parseInput inputText
     print $ solveA input

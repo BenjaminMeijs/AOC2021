@@ -1,4 +1,5 @@
-import AOC ( runSolvers, ExampleStatus(PuzzleInput) )
+module Day9 (solvers) where
+import AOC ( createSolvers, ExampleStatus(PuzzleInput) )
 import qualified Data.Array as A
 import qualified Data.Array.IArray as IA
 import qualified Data.Ix as Ix
@@ -7,7 +8,7 @@ import Data.List ( sort, minimumBy, group, sortOn, transpose )
 import Data.Maybe ( catMaybes )
 import Data.Ord ( Down(Down) )
 
-main = runSolvers 9 PuzzleInput parseInput solveA solveB 
+solvers = createSolvers parseInput solveA solveB 
 
 parseInput :: String -> A.Array (Int,Int) Int 
 parseInput input = A.listArray ((0,0),(width, height)) (concat $ transpose listList)

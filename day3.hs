@@ -1,4 +1,5 @@
-main = do
+module Day3 where
+solve = do
     inputText <- readFile "inputs/day3.txt" 
     let input = lines $ inputText
     print $ solveA input

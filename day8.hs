@@ -1,10 +1,11 @@
+module Day8 where
 import Data.List
 import qualified Data.Set as S
 import qualified Data.Map as M
 import Control.Monad ( (<$!>) )
 import AOC
 
-main = runSolvers 8 PuzzleInput parseInput solveA solveB 
+solve = runSolvers 8 PuzzleInput parseInput solveA solveB 
 
 
 type Input = [String]

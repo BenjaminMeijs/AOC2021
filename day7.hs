@@ -1,5 +1,6 @@
+module Day7 where
 import Data.List
-main = do
+solve = do
     inputText <- readFile "inputs/day7.txt" 
     let input = parseInput inputText
     print $ solveA input

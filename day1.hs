@@ -1,4 +1,5 @@
-main = do
+module Day1 where
+solve = do
     inputText <- readFile "inputs/day1.txt" 
     let input = map read . lines $ inputText
     print $ solveB input

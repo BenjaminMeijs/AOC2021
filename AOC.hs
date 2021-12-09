@@ -1,8 +1,13 @@
-module AOC (runSolvers, ExampleStatus (..), splitBy, bfsOn) where
+module AOC (runSolvers, ExampleStatus (..), splitBy, bfsOn, createSolvers) where
 import qualified Data.Sequence as Seq
 import qualified Data.Set as S
 type DayNum = Int
 data ExampleStatus = ExampleInput | PuzzleInput
+
+
+createSolvers :: (Show b, Show c) => (String -> a) -> (a -> b) -> (a -> c) -> Int -> ExampleStatus -> IO()
+createSolvers parser solverA solverB day example = runSolvers day example parser solverA solverB
+
 
 runSolvers :: (Show b, Show c) => Int -> ExampleStatus -> (String -> a) -> (a -> b) -> (a -> c) -> IO ()
 runSolvers day example parser solverA solverB = do

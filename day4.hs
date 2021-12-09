@@ -1,8 +1,9 @@
+module Day4 where
 import Data.List
 import Debug.Trace as T
 import Data.Maybe
 
-main = do
+solve = do
     inputText <- readFile "inputs/day4.txt" 
     let input = parseInput inputText
     print $ solveA input
