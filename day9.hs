@@ -3,6 +3,8 @@ import AOC ( createSolvers, ExampleStatus(PuzzleInput) )
 import qualified Data.Array as A
 import qualified Data.Array.IArray as IA
 import qualified Data.Ix as Ix
+import qualified Data.MultiSet as MS
+import qualified Data.PQueue.Max as PQM
 import Data.Char ( digitToInt )
 import Data.List ( sort, minimumBy, group, sortOn, transpose )
 import Data.Maybe ( catMaybes )
@@ -47,9 +49,15 @@ getNeighbours grid (x,y) = catMaybes [up, down, left, right]
 solveB :: Grid -> Int
 solveB = product . getBiggest3BassinsSize
 
+-- New implimentation using Multiset and Priority queue 
 getBiggest3BassinsSize :: Grid -> [Int]
-getBiggest3BassinsSize = take 3 . sortOn Down . map length 
-                        . group . sort . A.elems . getFlowsTowards
+getBiggest3BassinsSize = map (snd . unBassin) .  PQM.take 3 . PQM.fromList . map Bassin 
+                     . MS.toOccurList . MS.fromList . A.elems . getFlowsTowards
+
+newtype Bassin = Bassin {unBassin ::(Pos, MS.Occur)} deriving Eq
+instance Ord Bassin where
+  compare (Bassin (_, a)) (Bassin (_, b)) = compare a b
+
 
 getFlowsTowards :: Grid -> A.Array Pos Pos
 getFlowsTowards grid = result
