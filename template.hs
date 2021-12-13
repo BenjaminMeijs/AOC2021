@@ -1,7 +1,7 @@
 module Day0(solvers) where
 import AOC
 
-solvers = runSolvers 0 ExampleInput parseInput solveA solveB 
+solvers = createSolvers parseInput solveA solveB 0
 
 parseInput input = "todo"
 

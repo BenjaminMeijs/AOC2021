@@ -1,6 +1,7 @@
 module Main where
-import Day9 
+import Day13
 import AOC
+import AOC (ExampleStatus(ExampleInput))
 
 main :: IO ()
-main = solvers 9 PuzzleInput
+main = solvers PuzzleInput    

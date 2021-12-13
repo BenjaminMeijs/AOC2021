@@ -1,4 +1,4 @@
-module AOC (runSolvers, ExampleStatus (..), splitBy, bfsOn, createSolvers) where
+module AOC (runSolvers, ExampleStatus (..), splitBy, bfsOn, bfsOnWithVisited, createSolvers, createSolversNoPrint) where
 import qualified Data.Sequence as Seq
 import qualified Data.Set as S
 type DayNum = Int
@@ -8,10 +8,20 @@ data ExampleStatus = ExampleInput | PuzzleInput
 createSolvers :: (Show b, Show c) => (String -> a) -> (a -> b) -> (a -> c) -> Int -> ExampleStatus -> IO()
 createSolvers parser solverA solverB day example = runSolvers day example parser solverA solverB
 
+createSolversNoPrint :: (String -> a) -> (a->String) -> (a -> String) -> Int -> ExampleStatus -> IO()
+createSolversNoPrint parser solverA solverB day example = do
+    input <- readInput parser day example
+    putStrLn $ solverA input
+    putStrLn $ solverB input
+    return ()
+
+ 
+
+readInput parser day example = parser <$> readFile ("inputs/day" ++ show day ++ exampleStatusToPathAddition example ++ ".txt" )
 
 runSolvers :: (Show b, Show c) => Int -> ExampleStatus -> (String -> a) -> (a -> b) -> (a -> c) -> IO ()
 runSolvers day example parser solverA solverB = do
-    input <- parser <$> readFile ("inputs/day" ++ show day ++ exampleStatusToPathAddition example ++ ".txt" )
+    input <- readInput parser day example
     print $ solverA input
     print $ solverB input
     return ()
@@ -35,7 +45,7 @@ splitBy p s = case dropWhile p s of
 bfsOnTarget
   :: (Show v, Ord v, Eq v, Ord a, Eq a, Show a)
   => (a -> v) -- repr function for storing search elements in the visited set
-  -> (a -> Seq.Seq a) -- step function, get the next states
+  -> (S.Set v -> a -> Seq.Seq a) -- step function, get the next states
   -> a -- start state
   -> (v -> Bool) -- predicate that determines when to stop
   -> [a] -- all states found via BFS
@@ -48,7 +58,7 @@ bfsOnTarget repr step start isDone = help S.empty (Seq.singleton start)
     | repr cur `S.member` seen
     = help seen rest
     | otherwise
-    = let nbrs   = step cur
+    = let nbrs   = step seen cur
           queue' = rest Seq.>< nbrs
           seen'  = S.insert (repr cur) seen
       in  cur : help seen' queue'
@@ -59,4 +69,12 @@ bfsOn
   -> (a -> Seq.Seq a)
   -> a
   -> [a]
-bfsOn repr step start = bfsOnTarget repr step start (const False)
+bfsOn repr step start = bfsOnTarget repr (const step) start (const False)
+
+bfsOnWithVisited
+  :: (Show v, Ord v, Ord a, Eq a, Show a)
+  => (a -> v)
+  -> (S.Set v -> a -> Seq.Seq a)
+  -> a
+  -> [a]
+bfsOnWithVisited repr step start = bfsOnTarget repr step start (const False)
