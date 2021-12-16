@@ -1,11 +1,8 @@
 module Day16(solvers) where
-import Text.ParserCombinators.ReadP as P
-import AOC
-import Distribution.Simple.Glob (GlobSyntaxError(LiteralFileNameGlobStar))
-import Control.Exception.Base (evaluate)
+import Text.ParserCombinators.ReadP
+import AOC ( createSolvers, parseWith )
 
 solvers = createSolvers parseInput solveA solveB 16
-
 
 -- TYPE DEFINITIONS + fold over Packet
 data Packet = Packet Version Value deriving (Show, Eq, Ord)
@@ -78,14 +75,14 @@ evalPacket :: Packet -> Int
 evalPacket = foldPacket (const id, id, evalOp)
 
 evalOp :: OperatorType -> [Int] -> Int
-evalOp 0 xs = sum xs
-evalOp 1 xs = product xs
-evalOp 2 xs = minimum xs
-evalOp 3 xs = maximum xs
-evalOp 5 [l,r] = boolToInt $ l > r 
-evalOp 6 [l,r] = boolToInt $ l < r
-evalOp 7 [l,r] = boolToInt $ l == r
-evalOp _ _ = error "Unknown opcode"
+evalOp 0 = sum
+evalOp 1 = product
+evalOp 2 = minimum
+evalOp 3 = maximum
+evalOp 5 = \[l,r] -> boolToInt $ l > r 
+evalOp 6 = \[l,r] -> boolToInt $ l < r
+evalOp 7 = \[l,r] -> boolToInt $ l == r
+evalOp _ = error "Unknown opcode"
 
 
 -- Helper fucntions
