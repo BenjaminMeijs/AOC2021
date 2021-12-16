@@ -4,13 +4,21 @@ import qualified Data.MultiMap as M
 import qualified Data.Sequence as Seq
 import qualified Data.Set as S
 import qualified Data.MultiSet as MS
+import Text.ParserCombinators.ReadP as P
 import Data.List
 
-solvers = createSolvers parseInput solveA solveB 12
+solvers = createSolvers parseInput2 solveA solveB 12
 
 parseInput = M.fromList . toBidirect . map getPair . lines
   where getPair line = let [a,b] = splitBy(=='-') line in (a,b)
         toBidirect = concatMap (\(a,b) -> [(a,b), (b,a)])
+
+-- Later added to practice parser combinators
+parseInput2 = parseWith pInput
+  where pInput = toBidirect <$> pPairs
+        pPairs = many (pPair <* skipSpaces)
+        pPair = (,) <$> pLetters <* char '-' <*> pLetters
+        toBidirect = M.fromList . concatMap (\(a,b) -> [(a,b), (b,a)])
 
 
 isSmall (s:_) = 'a' <= s && s <= 'z'

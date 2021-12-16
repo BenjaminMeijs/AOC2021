@@ -3,13 +3,11 @@ import AOC
 import qualified Data.Array as A
 import qualified Data.Ix as Ix
 import Data.List
-import Data.Maybe
 import Data.Char (digitToInt)
 import Control.Monad.State.Lazy
-import Control.Monad
 import qualified Data.MultiSet as MS
 import qualified Data.Set as S
-import qualified Debug.Trace as T
+import Text.ParserCombinators.ReadP as P
 
 solvers = createSolvers parseInput solveA solveB 11
 
@@ -24,7 +22,7 @@ data Octopus = Flashed | Charging Int deriving (Show, Eq, Ord)
 
 
 -- Inspired by a solution from the Haskell subreddit
-solveA = sum . evalState (replicateM 100 step)
+solveA = id -- sum . evalState (replicateM 100 step)
 
 
 
